@@ -1,10 +1,15 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.verify;
+import java.time.LocalDateTime;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FeatureTest {
@@ -27,22 +32,36 @@ public class FeatureTest {
     @BeforeEach
     public void setup(){
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService);
+                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService, console);
         socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), socialNetworkService);
     }
 
     @Test
     public void post_and_read(){
+        LocalDateTime aliceFirstPostTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
+        LocalDateTime bobFirstPostTime = aliceFirstPostTime.plusMinutes(2);
+
+        given(clockService.getCurrentTime()).willReturn(aliceFirstPostTime);
         socialNetworkAPI.execute("Alice -> I love the weather today");
+
+        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime);
         socialNetworkAPI.execute("Bob -> Damn! We lost!");
+        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime.plusMinutes(1));
         socialNetworkAPI.execute("Bob -> Good game though.");
 
+        given(clockService.getCurrentTime()).willReturn(aliceFirstPostTime.plusMinutes(5));
         socialNetworkAPI.execute("Alice");
+
+        InOrder inOrder = inOrder(console);
+        inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
+
+        reset(console);
+
+        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime.plusMinutes(2));
         socialNetworkAPI.execute("Bob");
 
-        verify(console).printLine("I love the weather today (5 minutes ago)");
-        verify(console).printLine("Good game though. (1 minute ago)");
-        verify(console).printLine("Damn! We lost! (2 minutes ago)");
-
+        inOrder = inOrder(console);
+        inOrder.verify(console).printLine("Good game though. (1 minute ago)");
+        inOrder.verify(console).printLine("Damn! We lost! (2 minutes ago)");
     }
 }

@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -22,7 +24,7 @@ class SocialNetworkServiceShould {
 
     @BeforeEach
     void setUp() {
-        service = new SocialNetworkService(userRepository, postRepository, clockService);
+        service = new SocialNetworkService(userRepository, postRepository, clockService, console);
     }
 
     @Test
@@ -49,22 +51,23 @@ class SocialNetworkServiceShould {
 
     @Test
     public void read_user_post_and_print_it_out_on_the_console(){
-        LocalDateTime currentDateTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
+        LocalDateTime currentTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
         Command commandToExecute = new Command("Alice", CommandType.READ_COMMAND, null);
         Post expectedPost = new Post("Alice",
                 "I love the weather today",
-                currentDateTime);
+                currentTime.minusMinutes(5));
         Post expectedPost2 = new Post("Alice",
                 "It's a sunny day",
-                currentDateTime.plusSeconds(2));
+                currentTime.minusSeconds(10));
 
         given(userRepository.checkIfExists("Alice")).willReturn(true);
-
         given(postRepository.getPosts("Alice")).willReturn(List.of(expectedPost, expectedPost2));
+        given(clockService.getCurrentTime()).willReturn(currentTime);
 
         service.execute(commandToExecute);
 
-        then(console).should().printLine("I love the weather today");
-        then(console).should().printLine("It's a sunny day");
+        InOrder inOrder = Mockito.inOrder(console);
+        inOrder.verify(console).printLine("It's a sunny day (10 seconds ago)");
+        inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
     }
 }

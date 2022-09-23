@@ -14,6 +14,14 @@ public class Post {
         return userName;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,4 +41,5 @@ public class Post {
         result = 31 * result + dateTime.hashCode();
         return result;
     }
+
 }
