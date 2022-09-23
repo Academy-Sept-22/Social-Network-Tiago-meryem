@@ -1,58 +1,25 @@
-import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class SocialNetworkService {
 
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
-    private final ClockService clockService;
-    private final Console console;
-    private final TimeDifferenceFormatter timeDifferenceFormatter = new TimeDifferenceFormatter();
+    private final HashMap<CommandType, ExecutionCommand> executionCommands = new HashMap<>();
 
     public SocialNetworkService(UserRepository userRepository,
                                 PostRepository postRepository,
                                 ClockService clockService,
                                 Console console) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-        this.clockService = clockService;
-        this.console = console;
+        this.executionCommands.put(CommandType.POST_COMMAND,
+                new PostExecutionCommand(userRepository, postRepository, clockService));
+        this.executionCommands.put(CommandType.READ_COMMAND,
+                new ReadExecutionCommand(userRepository, postRepository, clockService, console));
     }
 
     public void execute(Command command) {
-
-        if (command.getType() == CommandType.POST_COMMAND) {
-            executePostCommand(command);
-            return;
-        }
-        if (command.getType() == CommandType.READ_COMMAND) {
-            executeReadCommand(command);
-            return;
-        }
-    }
-
-    private void executeReadCommand(Command command) {
-
-        if (userRepository.checkIfExists(command.getUserName())) {
-            List<Post> posts = postRepository.getPosts(command.getUserName());
-            LocalDateTime currentTime = clockService.getCurrentTime();
-            posts.stream().sorted(new RecentFirstComparator())
-                    .forEach(post ->
-                        console.printLine(post.getMessage() +
-                        " (" + timeDifferenceFormatter.formatTimeDifference(post.getDateTime(), currentTime) + ")"));
-        }
-    }
-
-    private void executePostCommand(Command command) {
-
-        if (!userRepository.checkIfExists(command.getUserName())) {
-            userRepository.add(new User(command.getUserName()));
-        }
-
-        postRepository.add(new Post(command.getUserName(),
-                command.getMessage(), clockService.getCurrentTime()));
-
+        Optional<ExecutionCommand> executionCommandOpt =
+                Optional.of(executionCommands.get(command.getType()));
+        executionCommandOpt.ifPresent(executionCommand -> executionCommand.execute(command));
     }
 
     public static class RecentFirstComparator implements Comparator<Post> {

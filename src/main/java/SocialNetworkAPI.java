@@ -1,8 +1,8 @@
 public class SocialNetworkAPI {
 
 
-    private CommandParser commandParser;
-    private SocialNetworkService socialNetworkService;
+    private final CommandParser commandParser;
+    private final SocialNetworkService socialNetworkService;
 
     public SocialNetworkAPI(CommandParser commandParser, SocialNetworkService socialNetworkService) {
         this.commandParser = commandParser;
