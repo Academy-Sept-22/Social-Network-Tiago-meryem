@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +8,7 @@ public class SocialNetworkService {
     private final PostRepository postRepository;
     private final ClockService clockService;
     private final Console console;
+    private final TimeDifferenceFormatter timeDifferenceFormatter = new TimeDifferenceFormatter();
 
     public SocialNetworkService(UserRepository userRepository,
                                 PostRepository postRepository,
@@ -40,24 +40,9 @@ public class SocialNetworkService {
             posts.stream().sorted(new RecentFirstComparator())
                     .forEach(post ->
                         console.printLine(post.getMessage() +
-                        " (" + formatTimeDifference(post.getDateTime(), currentTime) + ")"));
+                        " (" + timeDifferenceFormatter.formatTimeDifference(post.getDateTime(), currentTime) + ")"));
         }
     }
-
-    private String formatTimeDifference(LocalDateTime dateTime, LocalDateTime currentTime) {
-        Duration duration = Duration.between(dateTime, currentTime);
-        if (duration.toSeconds() < 60) {
-            if (duration.toSeconds() == 1) {
-                return duration.toSeconds() + " second ago";
-            }
-            return duration.toSeconds() + " seconds ago";
-        }
-        if (duration.toMinutes() == 1) {
-            return duration.toMinutes() + " minute ago";
-        }
-        return duration.toMinutes() + " minutes ago";
-    }
-
 
     private void executePostCommand(Command command) {
 
