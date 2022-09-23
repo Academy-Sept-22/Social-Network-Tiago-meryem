@@ -3,7 +3,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -41,27 +40,27 @@ public class FeatureTest {
         LocalDateTime aliceFirstPostTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
         LocalDateTime bobFirstPostTime = aliceFirstPostTime.plusMinutes(2);
 
-        given(clockService.getCurrentTime()).willReturn(aliceFirstPostTime);
+        givenTheTimeIs(aliceFirstPostTime);
         socialNetworkAPI.execute("Alice -> I love the weather today");
 
-        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime);
+        givenTheTimeIs(bobFirstPostTime);
         socialNetworkAPI.execute("Bob -> Damn! We lost!");
-        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime.plusMinutes(1));
+        givenTheTimeIs(bobFirstPostTime.plusMinutes(1));
         socialNetworkAPI.execute("Bob -> Good game though.");
 
-        given(clockService.getCurrentTime()).willReturn(aliceFirstPostTime.plusMinutes(5));
+        givenTheTimeIs(aliceFirstPostTime.plusMinutes(5));
         socialNetworkAPI.execute("Alice");
+
+        givenTheTimeIs(bobFirstPostTime.plusMinutes(2));
+        socialNetworkAPI.execute("Bob");
 
         InOrder inOrder = inOrder(console);
         inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
-
-        reset(console);
-
-        given(clockService.getCurrentTime()).willReturn(bobFirstPostTime.plusMinutes(2));
-        socialNetworkAPI.execute("Bob");
-
-        inOrder = inOrder(console);
         inOrder.verify(console).printLine("Good game though. (1 minute ago)");
         inOrder.verify(console).printLine("Damn! We lost! (2 minutes ago)");
+    }
+
+    private void givenTheTimeIs(LocalDateTime aliceFirstPostTime) {
+        given(clockService.getCurrentTime()).willReturn(aliceFirstPostTime);
     }
 }
