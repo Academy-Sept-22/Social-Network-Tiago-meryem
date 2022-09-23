@@ -21,12 +21,13 @@ public class FeatureTest {
     Damn! We lost! (2 minutes ago)*/
 
     SocialNetworkAPI socialNetworkAPI;
-    @Mock Console console;
+    @Mock private Console console;
+    @Mock private ClockService clockService;
 
     @BeforeEach
     public void setup(){
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(), new PostRepository(), new ClockService());
+                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService);
         socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), socialNetworkService);
     }
 

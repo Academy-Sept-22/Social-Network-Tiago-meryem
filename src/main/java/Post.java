@@ -4,11 +4,14 @@ public class Post {
     private final String userName;
     private final String message;
     private final LocalDateTime dateTime;
-
     public Post(String userName, String message, LocalDateTime dateTime) {
         this.userName = userName;
         this.message = message;
         this.dateTime = dateTime;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     @Override

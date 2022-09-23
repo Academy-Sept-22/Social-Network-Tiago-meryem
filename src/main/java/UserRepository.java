@@ -1,9 +1,14 @@
+import java.util.Dictionary;
+import java.util.HashMap;
+
 public class UserRepository {
+
+    private HashMap<String,User> users = new HashMap<>();
     public boolean checkIfExists(String userName) {
-        throw new UnsupportedOperationException();
+        return users.containsKey(userName);
     }
 
     public void add(User user) {
-        throw new UnsupportedOperationException();
+        users.put(user.getUserName(), user);
     }
 }
