@@ -1,5 +1,10 @@
-package com.socialnetwork;
+package com.socialnetwork.util;
 
+import com.socialnetwork.SocialNetworkAPI;
+import com.socialnetwork.command.Command;
+import com.socialnetwork.command.CommandParser;
+import com.socialnetwork.command.CommandType;
+import com.socialnetwork.service.SocialNetworkService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

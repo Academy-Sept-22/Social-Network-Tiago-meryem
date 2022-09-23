@@ -1,4 +1,12 @@
-package com.socialnetwork;
+package com.socialnetwork.service;
+
+import com.socialnetwork.command.Command;
+import com.socialnetwork.command.CommandType;
+import com.socialnetwork.repos.Post;
+import com.socialnetwork.repos.PostRepository;
+import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.util.ClockService;
+import com.socialnetwork.util.Console;
 
 import java.util.Comparator;
 import java.util.HashMap;

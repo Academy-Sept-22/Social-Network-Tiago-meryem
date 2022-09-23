@@ -1,5 +1,13 @@
-package com.socialnetwork;
+package com.socialnetwork.service;
 
+import com.socialnetwork.command.Command;
+import com.socialnetwork.command.CommandType;
+import com.socialnetwork.repos.Post;
+import com.socialnetwork.repos.PostRepository;
+import com.socialnetwork.repos.User;
+import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.util.ClockService;
+import com.socialnetwork.util.Console;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,12 +1,12 @@
-package com.socialnetwork;
+package com.socialnetwork.command;
 
 import java.util.Objects;
 
 public class Command {
 
-    private String userName;
-    private CommandType type;
-    private String message;
+    private final String userName;
+    private final CommandType type;
+    private final String message;
 
     public Command(String userName, CommandType type, String message) {
         this.userName = userName;

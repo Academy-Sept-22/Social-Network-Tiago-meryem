@@ -1,4 +1,6 @@
-package com.socialnetwork;
+package com.socialnetwork.service;
+
+import com.socialnetwork.command.Command;
 
 public abstract class ExecutionCommand {
 

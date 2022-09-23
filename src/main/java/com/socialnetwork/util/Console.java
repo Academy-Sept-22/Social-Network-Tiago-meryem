@@ -1,4 +1,4 @@
-package com.socialnetwork;
+package com.socialnetwork.util;
 
 public class Console {
     public void printLine(String lineText) {

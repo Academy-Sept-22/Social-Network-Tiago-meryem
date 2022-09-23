@@ -1,4 +1,4 @@
-package com.socialnetwork;
+package com.socialnetwork.repos;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

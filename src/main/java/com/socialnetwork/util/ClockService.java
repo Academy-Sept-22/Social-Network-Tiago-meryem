@@ -1,4 +1,4 @@
-package com.socialnetwork;
+package com.socialnetwork.util;
 
 import java.time.LocalDateTime;
 

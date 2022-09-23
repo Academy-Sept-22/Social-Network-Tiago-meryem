@@ -1,10 +1,10 @@
-package com.socialnetwork;
+package com.socialnetwork.repos;
 
 import java.util.HashMap;
 
 public class UserRepository {
 
-    private HashMap<String,User> users = new HashMap<>();
+    private final HashMap<String,User> users = new HashMap<>();
     public boolean checkIfExists(String userName) {
         return users.containsKey(userName);
     }

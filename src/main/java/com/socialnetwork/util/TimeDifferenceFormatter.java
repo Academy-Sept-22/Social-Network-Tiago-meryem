@@ -1,11 +1,11 @@
-package com.socialnetwork;
+package com.socialnetwork.util;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TimeDifferenceFormatter {
 
-    String formatTimeDifference(LocalDateTime dateTime, LocalDateTime currentTime) {
+    public String formatTimeDifference(LocalDateTime dateTime, LocalDateTime currentTime) {
         Duration duration = Duration.between(dateTime, currentTime);
         if (duration.toSeconds() < 60) {
             if (duration.toSeconds() == 1) {

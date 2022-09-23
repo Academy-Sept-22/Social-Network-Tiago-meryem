@@ -1,4 +1,4 @@
-package com.socialnetwork;
+package com.socialnetwork.command;
 
 public class CommandParser {
     public Command parseString(String commandLine) {
