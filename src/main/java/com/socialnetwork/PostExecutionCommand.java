@@ -1,3 +1,5 @@
+package com.socialnetwork;
+
 public class PostExecutionCommand extends ExecutionCommand {
     private final UserRepository userRepository;
     private final PostRepository postRepository;

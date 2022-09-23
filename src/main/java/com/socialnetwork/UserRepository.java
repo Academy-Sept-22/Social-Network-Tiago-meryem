@@ -1,4 +1,5 @@
-import java.util.Dictionary;
+package com.socialnetwork;
+
 import java.util.HashMap;
 
 public class UserRepository {

@@ -1,3 +1,5 @@
+package com.socialnetwork;
+
 public class CommandParser {
     public Command parseString(String commandLine) {
         if (commandLine.contains(" -> ")) {

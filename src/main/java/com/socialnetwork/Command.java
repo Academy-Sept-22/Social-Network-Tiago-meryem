@@ -1,3 +1,5 @@
+package com.socialnetwork;
+
 import java.util.Objects;
 
 public class Command {

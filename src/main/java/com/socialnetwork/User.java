@@ -1,3 +1,5 @@
+package com.socialnetwork;
+
 public class User {
 
     private final String userName;
