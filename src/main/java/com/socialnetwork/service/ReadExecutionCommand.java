@@ -9,6 +9,7 @@ import com.socialnetwork.util.Console;
 import com.socialnetwork.util.TimeDifferenceFormatter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReadExecutionCommand extends ExecutionCommand {
@@ -33,10 +34,18 @@ public class ReadExecutionCommand extends ExecutionCommand {
         if (userRepository.checkIfExists(command.getUserName())) {
             List<Post> posts = postRepository.getPosts(command.getUserName());
             LocalDateTime currentTime = clockService.getCurrentTime();
-            posts.stream().sorted(new SocialNetworkService.RecentFirstComparator())
+            posts.stream().sorted(new RecentFirstComparator())
                     .forEach(post ->
                             console.printLine(post.getMessage() +
                                     " (" + timeDifferenceFormatter.formatTimeDifference(post.getDateTime(), currentTime) + ")"));
+        }
+    }
+
+    public static class RecentFirstComparator implements Comparator<Post> {
+        @Override
+        public int compare(Post post1, Post post2) {
+            // reverse comparison
+            return post2.getDateTime().compareTo(post1.getDateTime());
         }
     }
 }

@@ -2,13 +2,11 @@ package com.socialnetwork.service;
 
 import com.socialnetwork.command.Command;
 import com.socialnetwork.command.CommandType;
-import com.socialnetwork.repos.Post;
 import com.socialnetwork.repos.PostRepository;
 import com.socialnetwork.repos.UserRepository;
 import com.socialnetwork.util.ClockService;
 import com.socialnetwork.util.Console;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -27,16 +25,8 @@ public class SocialNetworkService {
     }
 
     public void execute(Command command) {
-        Optional<ExecutionCommand> executionCommandOpt =
-                Optional.of(executionCommands.get(command.getType()));
-        executionCommandOpt.ifPresent(executionCommand -> executionCommand.execute(command));
+        Optional.of(executionCommands.get(command.getType())).
+                ifPresent(executionCommand -> executionCommand.execute(command));
     }
 
-    public static class RecentFirstComparator implements Comparator<Post> {
-        @Override
-        public int compare(Post post1, Post post2) {
-            // reverse comparison
-            return post2.getDateTime().compareTo(post1.getDateTime());
-        }
-    }
 }
