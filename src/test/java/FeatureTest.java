@@ -25,7 +25,9 @@ public class FeatureTest {
 
     @BeforeEach
     public void setup(){
-        socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), new SocialNetworkService());
+        SocialNetworkService socialNetworkService =
+                new SocialNetworkService(new UserRepository(), new PostRepository(), new ClockService());
+        socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), socialNetworkService);
     }
 
     @Test
