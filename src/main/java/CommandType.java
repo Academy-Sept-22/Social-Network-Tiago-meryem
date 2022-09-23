@@ -1,3 +1,3 @@
 public enum CommandType {
-    POST_COMMAND
+    READ_COMMAND, POST_COMMAND
 }

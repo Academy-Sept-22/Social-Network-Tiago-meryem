@@ -25,4 +25,14 @@ class CommandParserShould {
                 "I love the weather today");
         assertEquals(expectedCommand, command);
     }
+
+    @Test
+    void parse_read_command() {
+        Command command = parser.parseString("Alice");
+
+        Command expectedCommand = new Command("Alice",
+                CommandType.READ_COMMAND,
+                null);
+        assertEquals(expectedCommand, command);
+    }
 }

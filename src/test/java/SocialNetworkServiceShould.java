@@ -5,6 +5,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -17,6 +18,7 @@ class SocialNetworkServiceShould {
     @Mock private UserRepository userRepository;
     @Mock private PostRepository postRepository;
     @Mock private ClockService clockService;
+    @Mock private Console console;
 
     @BeforeEach
     void setUp() {
@@ -43,5 +45,26 @@ class SocialNetworkServiceShould {
 
         then(userRepository).should().add(expectedUser);
         then(postRepository).should().add(expectedPost);
+    }
+
+    @Test
+    public void read_user_post_and_print_it_out_on_the_console(){
+        LocalDateTime currentDateTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
+        Command commandToExecute = new Command("Alice", CommandType.READ_COMMAND, null);
+        Post expectedPost = new Post("Alice",
+                "I love the weather today",
+                currentDateTime);
+        Post expectedPost2 = new Post("Alice",
+                "It's a sunny day",
+                currentDateTime.plusSeconds(2));
+
+        given(userRepository.checkIfExists("Alice")).willReturn(true);
+
+        given(postRepository.getPosts("Alice")).willReturn(List.of(expectedPost, expectedPost2));
+
+        service.execute(commandToExecute);
+
+        then(console).should().printLine("I love the weather today");
+        then(console).should().printLine("It's a sunny day");
     }
 }
