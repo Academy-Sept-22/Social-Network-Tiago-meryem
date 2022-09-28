@@ -1,40 +1,7 @@
 package com.socialnetwork.command;
 
-public class CommandParser {
-    public Command parseString(String commandLine) {
-        commandLine = commandLine.trim();
+public abstract class CommandParser {
 
-        String[] partsOfCommand = commandLine.split(" follows ");
-        if (partsOfCommand.length == 2
-                && !partsOfCommand[0].trim().contains(" ")
-                && !partsOfCommand[1].trim().contains(" ")) {
-            return new Command(partsOfCommand[0].trim(),
-                    CommandType.FOLLOWS_COMMAND,
-                    partsOfCommand[1].trim());
-        }
+    public abstract Command parse(String commandLine);
 
-        partsOfCommand = commandLine.split(" -> ");
-        if (partsOfCommand.length == 2
-                && !partsOfCommand[0].trim().contains(" ")) {
-            return new Command(partsOfCommand[0].trim(),
-                    CommandType.POST_COMMAND,
-                    partsOfCommand[1]);
-        }
-
-        partsOfCommand = commandLine.split(" ");
-        if (partsOfCommand.length == 2
-                && partsOfCommand[1].trim().equals("wall")) {
-            return new Command(partsOfCommand[0].trim(),
-                    CommandType.WALL_COMMAND,
-                    null);
-        }
-
-        if(!commandLine.contains(" ")){
-            return new Command(commandLine,
-                    CommandType.READ_COMMAND,
-                    null);
-        }
-
-        throw new IllegalArgumentException("Cannot parse '" + commandLine + "'");
-    }
 }

@@ -1,8 +1,7 @@
 package com.socialnetwork;
 
-import com.socialnetwork.command.CommandParser;
-import com.socialnetwork.repos.PostRepository;
-import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.repos.PostInMemoryRepository;
+import com.socialnetwork.repos.UserInMemoryRepository;
 import com.socialnetwork.service.PostPrinter;
 import com.socialnetwork.service.SocialNetworkService;
 import com.socialnetwork.util.ClockService;
@@ -40,11 +39,11 @@ public class FeatureTest {
     @BeforeEach
     public void setup(){
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(),
-                        new PostRepository(),
+                new SocialNetworkService(new UserInMemoryRepository(),
+                        new PostInMemoryRepository(),
                         clockService,
                         new PostPrinter(clockService, console));
-        socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), socialNetworkService);
+        socialNetworkAPI = new SocialNetworkAPI(socialNetworkService);
     }
 
     @Test

@@ -1,8 +1,7 @@
 package com.socialnetwork;
 
-import com.socialnetwork.command.CommandParser;
-import com.socialnetwork.repos.PostRepository;
-import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.repos.PostInMemoryRepository;
+import com.socialnetwork.repos.UserInMemoryRepository;
 import com.socialnetwork.service.PostPrinter;
 import com.socialnetwork.service.SocialNetworkService;
 import com.socialnetwork.util.ClockService;
@@ -17,9 +16,9 @@ public class Application {
         ClockService clockService = new ClockService();
         Console console = new Console();
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService, new PostPrinter(clockService, console));
+                new SocialNetworkService(new UserInMemoryRepository(), new PostInMemoryRepository(), clockService, new PostPrinter(clockService, console));
         SocialNetworkAPI socialNetworkAPI =
-                new SocialNetworkAPI(new CommandParser(), socialNetworkService);
+                new SocialNetworkAPI(socialNetworkService);
         Scanner in = new Scanner(System.in);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Exiting...")));

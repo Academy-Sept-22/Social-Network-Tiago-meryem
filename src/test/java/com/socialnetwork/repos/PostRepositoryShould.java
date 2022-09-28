@@ -13,7 +13,7 @@ class PostRepositoryShould {
 
     @BeforeEach
     public void setup(){
-        postRepository = new PostRepository();
+        postRepository = new PostInMemoryRepository();
     }
 
     @Test

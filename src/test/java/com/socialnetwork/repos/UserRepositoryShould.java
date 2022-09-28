@@ -11,7 +11,7 @@ class UserRepositoryShould {
 
     @BeforeEach
     public void setup(){
-        userRepository = new UserRepository();
+        userRepository = new UserInMemoryRepository();
     }
 
     @Test
