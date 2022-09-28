@@ -47,4 +47,13 @@ class CommandParserShould {
         assertEquals(expectedCommand, command);
     }
 
+    @Test
+    void parse_wall_command() {
+        Command command = parser.parseString("Charlie wall");
+
+        Command expectedCommand = new Command("Charlie",
+                CommandType.WALL_COMMAND,
+                null);
+        assertEquals(expectedCommand, command);
+    }
 }

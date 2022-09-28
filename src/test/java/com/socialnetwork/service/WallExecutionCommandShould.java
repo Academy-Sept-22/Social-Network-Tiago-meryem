@@ -4,6 +4,7 @@ import com.socialnetwork.command.Command;
 import com.socialnetwork.command.CommandType;
 import com.socialnetwork.repos.Post;
 import com.socialnetwork.repos.PostRepository;
+import com.socialnetwork.repos.User;
 import com.socialnetwork.repos.UserRepository;
 import com.socialnetwork.util.ClockService;
 import com.socialnetwork.util.Console;
@@ -20,7 +21,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class ReadExecutionCommandShould {
+class WallExecutionCommandShould {
 
     @Mock private UserRepository userRepository;
     @Mock private PostRepository postRepository;
@@ -30,24 +31,33 @@ class ReadExecutionCommandShould {
     @Test
     public void read_user_post_and_print_it_out_on_the_console(){
         LocalDateTime currentTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
-        Command commandToExecute = new Command("Alice", CommandType.READ_COMMAND, null);
-        Post expectedPost = new Post("Alice",
+        Command commandToExecute = new Command("Charlie", CommandType.WALL_COMMAND, null);
+
+        User aliceUser = new User("Alice");
+        User userCharlie = new User("Charlie");
+        userCharlie.follow(aliceUser);
+
+        given(userRepository.checkIfExists("Charlie")).willReturn(true);
+        given(userRepository.get("Charlie")).willReturn(userCharlie);
+
+        Post charliePost = new Post("Charlie",
+                "I'm in New York today! Anyone want to have a coffee?",
+                currentTime.minusSeconds(2));
+        Post alicePost = new Post("Alice",
                 "I love the weather today",
                 currentTime.minusMinutes(5));
-        Post expectedPost2 = new Post("Alice",
-                "It's a sunny day",
-                currentTime.minusSeconds(10));
 
-        given(userRepository.checkIfExists("Alice")).willReturn(true);
-        given(postRepository.getPosts("Alice")).willReturn(List.of(expectedPost, expectedPost2));
+        given(postRepository.getPosts("Charlie")).willReturn(List.of(charliePost));
+        given(postRepository.getPosts("Alice")).willReturn(List.of(alicePost));
+
         given(clockService.getCurrentTime()).willReturn(currentTime);
 
-        ReadExecutionCommand executionCommand = new ReadExecutionCommand(userRepository,
+        WallExecutionCommand executionCommand = new WallExecutionCommand(userRepository,
                 postRepository, new PostPrinter(clockService, console));
         executionCommand.execute(commandToExecute);
 
         InOrder inOrder = Mockito.inOrder(console);
-        inOrder.verify(console).printLine("It's a sunny day (10 seconds ago)");
+        inOrder.verify(console).printLine("I'm in New York today! Anyone want to have a coffee? (2 seconds ago)");
         inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
     }
 }

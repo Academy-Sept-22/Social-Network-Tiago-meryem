@@ -33,7 +33,10 @@ class SocialNetworkServiceShould {
 
     @BeforeEach
     void setUp() {
-        service = new SocialNetworkService(userRepository, postRepository, clockService, console);
+        service = new SocialNetworkService(userRepository,
+                postRepository,
+                clockService,
+                new PostPrinter(clockService, console));
     }
 
     @Test

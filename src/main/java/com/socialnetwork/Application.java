@@ -3,6 +3,7 @@ package com.socialnetwork;
 import com.socialnetwork.command.CommandParser;
 import com.socialnetwork.repos.PostRepository;
 import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.service.PostPrinter;
 import com.socialnetwork.service.SocialNetworkService;
 import com.socialnetwork.util.ClockService;
 import com.socialnetwork.util.Console;
@@ -16,7 +17,7 @@ public class Application {
         ClockService clockService = new ClockService();
         Console console = new Console();
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService, console);
+                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService, new PostPrinter(clockService, console));
         SocialNetworkAPI socialNetworkAPI =
                 new SocialNetworkAPI(new CommandParser(), socialNetworkService);
         Scanner in = new Scanner(System.in);

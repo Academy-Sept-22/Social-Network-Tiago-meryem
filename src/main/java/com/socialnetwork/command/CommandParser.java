@@ -21,12 +21,20 @@ public class CommandParser {
                     partsOfCommand[1]);
         }
 
+        partsOfCommand = commandLine.split(" ");
+        if (partsOfCommand.length == 2
+                && partsOfCommand[1].trim().equals("wall")) {
+            return new Command(partsOfCommand[0].trim(),
+                    CommandType.WALL_COMMAND,
+                    null);
+        }
+
         if(!commandLine.contains(" ")){
             return new Command(commandLine,
                     CommandType.READ_COMMAND,
                     null);
         }
 
-        throw new IllegalArgumentException("Cannot parse " + commandLine);
+        throw new IllegalArgumentException("Cannot parse '" + commandLine + "'");
     }
 }

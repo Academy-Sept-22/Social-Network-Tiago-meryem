@@ -3,6 +3,7 @@ package com.socialnetwork;
 import com.socialnetwork.command.CommandParser;
 import com.socialnetwork.repos.PostRepository;
 import com.socialnetwork.repos.UserRepository;
+import com.socialnetwork.service.PostPrinter;
 import com.socialnetwork.service.SocialNetworkService;
 import com.socialnetwork.util.ClockService;
 import com.socialnetwork.util.Console;
@@ -39,14 +40,17 @@ public class FeatureTest {
     @BeforeEach
     public void setup(){
         SocialNetworkService socialNetworkService =
-                new SocialNetworkService(new UserRepository(), new PostRepository(), clockService, console);
+                new SocialNetworkService(new UserRepository(),
+                        new PostRepository(),
+                        clockService,
+                        new PostPrinter(clockService, console));
         socialNetworkAPI = new SocialNetworkAPI(new CommandParser(), socialNetworkService);
     }
 
     @Test
-    public void post_and_read(){
+    public void post_read_follow_wall(){
         LocalDateTime aliceFirstPostTime = LocalDateTime.of(2022, 9, 1, 12, 0, 0);
-        LocalDateTime bobFirstPostTime = aliceFirstPostTime.plusMinutes(2);
+        LocalDateTime bobFirstPostTime = aliceFirstPostTime.plusMinutes(3);
 
         givenTheTimeIs(aliceFirstPostTime);
         socialNetworkAPI.execute("Alice -> I love the weather today");
@@ -62,10 +66,29 @@ public class FeatureTest {
         givenTheTimeIs(bobFirstPostTime.plusMinutes(2));
         socialNetworkAPI.execute("Bob");
 
+        givenTheTimeIs(aliceFirstPostTime.plusMinutes(5));
+        socialNetworkAPI.execute("Charlie -> I'm in New York today! Anyone want to have a coffee?");
+
+        givenTheTimeIs(aliceFirstPostTime.plusMinutes(5).plusSeconds(2));
+        socialNetworkAPI.execute("Charlie follows Alice");
+        socialNetworkAPI.execute("Charlie wall");
+
+        givenTheTimeIs(aliceFirstPostTime.plusMinutes(5).plusSeconds(15));
+        socialNetworkAPI.execute("Charlie follows Bob");
+        socialNetworkAPI.execute("Charlie wall");
+
         InOrder inOrder = inOrder(console);
         inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
         inOrder.verify(console).printLine("Good game though. (1 minute ago)");
         inOrder.verify(console).printLine("Damn! We lost! (2 minutes ago)");
+
+        inOrder.verify(console).printLine("I'm in New York today! Anyone want to have a coffee? (2 seconds ago)");
+        inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
+
+        inOrder.verify(console).printLine("I'm in New York today! Anyone want to have a coffee? (15 seconds ago)");
+        inOrder.verify(console).printLine("Good game though. (1 minute ago)");
+        inOrder.verify(console).printLine("Damn! We lost! (2 minutes ago)");
+        inOrder.verify(console).printLine("I love the weather today (5 minutes ago)");
     }
 
     private void givenTheTimeIs(LocalDateTime aliceFirstPostTime) {

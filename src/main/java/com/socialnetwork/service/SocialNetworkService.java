@@ -5,7 +5,6 @@ import com.socialnetwork.command.CommandType;
 import com.socialnetwork.repos.PostRepository;
 import com.socialnetwork.repos.UserRepository;
 import com.socialnetwork.util.ClockService;
-import com.socialnetwork.util.Console;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -17,13 +16,15 @@ public class SocialNetworkService {
     public SocialNetworkService(UserRepository userRepository,
                                 PostRepository postRepository,
                                 ClockService clockService,
-                                Console console) {
+                                PostPrinter postPrinter) {
         this.executionCommands.put(CommandType.POST_COMMAND,
                 new PostExecutionCommand(userRepository, postRepository, clockService));
         this.executionCommands.put(CommandType.READ_COMMAND,
-                new ReadExecutionCommand(userRepository, postRepository, clockService, console));
+                new ReadExecutionCommand(userRepository, postRepository, postPrinter));
         this.executionCommands.put(CommandType.FOLLOWS_COMMAND,
                 new FollowExecutionCommand(userRepository));
+        this.executionCommands.put(CommandType.WALL_COMMAND,
+                new WallExecutionCommand(userRepository, postRepository, postPrinter));
     }
 
     public void execute(Command command) {
