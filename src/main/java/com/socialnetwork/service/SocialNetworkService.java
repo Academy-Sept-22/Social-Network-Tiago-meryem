@@ -22,6 +22,8 @@ public class SocialNetworkService {
                 new PostExecutionCommand(userRepository, postRepository, clockService));
         this.executionCommands.put(CommandType.READ_COMMAND,
                 new ReadExecutionCommand(userRepository, postRepository, clockService, console));
+        this.executionCommands.put(CommandType.FOLLOWS_COMMAND,
+                new FollowExecutionCommand(userRepository));
     }
 
     public void execute(Command command) {

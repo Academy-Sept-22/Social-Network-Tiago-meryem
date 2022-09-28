@@ -1,8 +1,12 @@
 package com.socialnetwork.repos;
 
+import java.util.*;
+
 public class User {
 
     private final String userName;
+
+    private final Collection<User> follows = new HashSet<>();
 
     public User(String userName) {
         this.userName = userName;
@@ -12,6 +16,14 @@ public class User {
         return userName;
     }
 
+    public void follow(User userToFollow) {
+        follows.add(userToFollow);
+    }
+
+    public Collection<User> follows() {
+        return Collections.unmodifiableCollection(follows);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -19,11 +31,14 @@ public class User {
 
         User user = (User) o;
 
-        return userName.equals(user.userName);
+        if (!userName.equals(user.userName)) return false;
+        return follows.equals(user.follows);
     }
 
     @Override
     public int hashCode() {
-        return userName.hashCode();
+        int result = userName.hashCode();
+        result = 31 * result + follows.hashCode();
+        return result;
     }
 }

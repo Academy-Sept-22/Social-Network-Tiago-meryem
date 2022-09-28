@@ -12,4 +12,12 @@ public class UserRepository {
     public void add(User user) {
         users.put(user.getUserName(), user);
     }
+
+    public User get(String username) {
+        return users.get(username);
+    }
+
+    public void update(User user) {
+        users.replace(user.getUserName(), user);
+    }
 }

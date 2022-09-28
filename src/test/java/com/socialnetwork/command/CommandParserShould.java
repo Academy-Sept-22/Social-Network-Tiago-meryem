@@ -36,4 +36,15 @@ class CommandParserShould {
                 null);
         assertEquals(expectedCommand, command);
     }
+
+    @Test
+    void parse_follow_command() {
+        Command command = parser.parseString("Charlie follows Alice");
+
+        Command expectedCommand = new Command("Charlie",
+                CommandType.FOLLOWS_COMMAND,
+                "Alice");
+        assertEquals(expectedCommand, command);
+    }
+
 }

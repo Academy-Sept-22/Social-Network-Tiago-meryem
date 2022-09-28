@@ -1,5 +1,5 @@
 package com.socialnetwork.command;
 
 public enum CommandType {
-    READ_COMMAND, POST_COMMAND
+    READ_COMMAND, FOLLOWS_COMMAND, POST_COMMAND
 }
