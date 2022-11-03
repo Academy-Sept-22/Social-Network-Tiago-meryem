@@ -41,4 +41,12 @@ public class User {
         result = 31 * result + follows.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", follows=" + follows +
+                '}';
+    }
 }
