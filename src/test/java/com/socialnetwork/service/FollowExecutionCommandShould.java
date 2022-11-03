@@ -6,7 +6,9 @@ import com.socialnetwork.repos.User;
 import com.socialnetwork.repos.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.BDDMockito.given;
@@ -20,24 +22,24 @@ public class FollowExecutionCommandShould {
     @Test
     void execute() {
 
-        Command commandToExecute = new Command("Charlie",
+        Command commandToExecute = new Command("Bob",
                 CommandType.FOLLOWS_COMMAND,
                 "Alice");
 
-        User aliceUser = new User("Charlie");
-        User bobUser = new User("Alice");
+        User charlieUser = new User("Charlie");
+        User aliceUser = new User("Alice");
 
         given(userRepository.checkIfExists("Charlie")).willReturn(true);
         given(userRepository.checkIfExists("Alice")).willReturn(true);
-        given(userRepository.get("Charlie")).willReturn(aliceUser);
-        given(userRepository.get("Alice")).willReturn(bobUser);
+        given(userRepository.get("Charlie")).willReturn(charlieUser);
+        given(userRepository.get("Alice")).willReturn(aliceUser);
 
         FollowExecutionCommand executionCommand = new FollowExecutionCommand(userRepository);
         executionCommand.execute(commandToExecute);
 
-        User aliceUserFollowingBob = new User("Charlie");
-        aliceUserFollowingBob.follow(bobUser);
+        User charlieFollowingAlice = new User("Charlie");
+        charlieFollowingAlice.follow(aliceUser);
 
-        then(userRepository).should().update(aliceUser);
+        then(userRepository).should().update(charlieUser);
     }
 }

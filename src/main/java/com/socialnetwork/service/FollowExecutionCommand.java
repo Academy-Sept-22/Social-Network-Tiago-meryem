@@ -13,15 +13,15 @@ public class FollowExecutionCommand extends ExecutionCommand {
 
     public void execute(Command commandToExecute) {
 
-       // if (userRepository.checkIfExists(commandToExecute.getUserName())
-         //   && userRepository.checkIfExists(commandToExecute.getMessage())) {
+        if (userRepository.checkIfExists(commandToExecute.getUserName())
+            && userRepository.checkIfExists(commandToExecute.getMessage())) {
 
             User userToFollow = userRepository.get(commandToExecute.getMessage());
             User user = userRepository.get(commandToExecute.getUserName());
             user.follow(userToFollow);
 
-           // userRepository.update(user);
-        //}
+            userRepository.update(user);
+        }
 
     }
 }
